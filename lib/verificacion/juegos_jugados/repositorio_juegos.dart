@@ -14,22 +14,22 @@ abstract class RepositorioJuegosJugados {
       NickFormado nick);
 }
 
-class RepositorioJuegosJugadosReal extends RepositorioJuegosJugados {
-  RepositorioJuegosJugadosReal(RepositorioXml repositorio) : super(repositorio);
+// class RepositorioJuegosJugadosReal extends RepositorioJuegosJugados {
+//   RepositorioJuegosJugadosReal(RepositorioXml repositorio) : super(repositorio);
 
-  @override
-  Future<Either<Problema, Set<JuegoJugado>>> obtenerJuegosJugados(
-      NickFormado nick) async {
-    final Either<Problema, List<String>> resultadoXml =
-        await super.repositorio.obtenerXml(nick);
-    return resultadoXml.match((l) {
-      return Left(l);
-    }, (r) {
-      final resultado = _obtenerJuegosJugadosDesdeXml(r);
-      return resultado;
-    });
-  }
-}
+//   @override
+//   Future<Either<Problema, Set<JuegoJugado>>> obtenerJuegosJugados(
+//       NickFormado nick) async {
+//     final Either<Problema, List<String>> resultadoXml =
+//         await super.repositorio.obtenerXml(nick);
+//     return resultadoXml.match((l) {
+//       return Left(l);
+//     }, (r) {
+//       final resultado = _obtenerJuegosJugadosDesdeXml(r);
+//       return resultado;
+//     });
+//   }
+// }
 
 class RepositorioJuegosJugadosPruebas extends RepositorioJuegosJugados {
   RepositorioJuegosJugadosPruebas(RepositorioXml repositorio)
@@ -110,54 +110,54 @@ class RepositorioJuegosJugadosPruebas extends RepositorioJuegosJugados {
     return jugadasPorPaginas;
   }
 
-  Either<Problema, Set<JuegoJugado>> _obtenerJuegosJugadosDesdeXml(
-      List<String> elXml) {
-    // Set<JuegoJugado> conjuntoSet = {};
-    final resultado = elXml.map((e) => _obtenerUnSoloSet(e));
-    if (resultado.any((element) => element is Problema)) {
-      return Left(VersionIncorrectaXML());
-    }
-    final soloSets = resultado.map((e) => e.getOrElse((l) => {}));
-    // soloSets.forEach((element) {
-    //   conjuntoSet.addAll(element.toList());
-
-    // });
-
-    final conjunto =
-        soloSets.fold<Set<JuegoJugado>>({}, (p, a) => a..addAll(p.toList()));
-    return Right(conjunto);
-  }
-
-  Either<Problema, Set<JuegoJugado>> _obtenerUnSoloSet(String Xml) {
-    try {
-      String xmlitemIndex = "item";
-      String itemNameAttribute = "name";
-      String itemIDAttribute = "objectid";
-
-      Set<JuegoJugado> setResultado = {};
-
-      XmlDocument documento = XmlDocument.parse(Xml);
-      final losPlay = documento.findAllElements(xmlitemIndex);
-      final conjuntoIterable = losPlay.map((e) {
-        String nombre = e.getAttribute(itemNameAttribute)!;
-        String id = e.getAttribute(itemIDAttribute)!;
-        return JuegoJugado.constructor(
-            idPropuesta: id, nombrePropuesta: nombre);
-      });
-      final conjunto = Set<JuegoJugado>.from(conjuntoIterable);
-      setResultado.addAll(conjunto);
-
-      return Right(setResultado);
-    } catch (e) {
-      return Left(VersionIncorrectaXML());
-    }
-  }
-
   @override
   Future<Either<Problema, Set<JuegoJugado>>> obtenerJuegosJugadosPorUsuario(
       NickFormado nick) async {
     List<String> losXml = _obtenerXmlJugadasDelDisco(nombre: nick.valor);
     final resulatdo = _obtenerJuegosJugadosDesdeXml(losXml);
     return resulatdo;
+  }
+}
+
+///////////////////////////////////////////////////////////////////////////////
+Either<Problema, Set<JuegoJugado>> _obtenerJuegosJugadosDesdeXml(
+    List<String> elXml) {
+  // Set<JuegoJugado> conjuntoSet = {};
+  final resultado = elXml.map((e) => _obtenerUnSoloSet(e));
+  if (resultado.any((element) => element is Problema)) {
+    return Left(VersionIncorrectaXML());
+  }
+  final soloSets = resultado.map((e) => e.getOrElse((l) => {}));
+  // soloSets.forEach((element) {
+  //   conjuntoSet.addAll(element.toList());
+
+  // });
+
+  final conjunto =
+      soloSets.fold<Set<JuegoJugado>>({}, (p, a) => a..addAll(p.toList()));
+  return Right(conjunto);
+}
+
+Either<Problema, Set<JuegoJugado>> _obtenerUnSoloSet(String Xml) {
+  try {
+    String xmlitemIndex = "item";
+    String itemNameAttribute = "name";
+    String itemIDAttribute = "objectid";
+
+    Set<JuegoJugado> setResultado = {};
+
+    XmlDocument documento = XmlDocument.parse(Xml);
+    final losPlay = documento.findAllElements(xmlitemIndex);
+    final conjuntoIterable = losPlay.map((e) {
+      String nombre = e.getAttribute(itemNameAttribute)!;
+      String id = e.getAttribute(itemIDAttribute)!;
+      return JuegoJugado.constructor(idPropuesta: id, nombrePropuesta: nombre);
+    });
+    final conjunto = Set<JuegoJugado>.from(conjuntoIterable);
+    setResultado.addAll(conjunto);
+
+    return Right(setResultado);
+  } catch (e) {
+    return Left(VersionIncorrectaXML());
   }
 }
