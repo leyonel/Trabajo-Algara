@@ -126,10 +126,6 @@ Either<Problema, Set<JuegoJugado>> _obtenerJuegosJugadosDesdeXml(
     return Left(VersionIncorrectaXML());
   }
   final soloSets = resultado.map((e) => e.getOrElse((l) => {}));
-  // soloSets.forEach((element) {
-  //   conjuntoSet.addAll(element.toList());
-
-  // });
 
   final conjunto = soloSets.fold<Set<JuegoJugado>>(
       {},

@@ -127,9 +127,9 @@ void main() {
       });
     });
 
-    test('benthor a jugado Dungeon Lords', () async {
+    test('benthor a jugado "The Dwarf King"', () async {
       final juego = JuegoJugado.constructor(
-          idPropuesta: "13972961", nombrePropuesta: "Dungeon Lords");
+          idPropuesta: "85250", nombrePropuesta: "The Dwarf King");
 
       final respuesta = await repositorio
           .obtenerJuegosJugadosPorUsuario(NickFormado.constructor('benthor'));
