@@ -37,5 +37,12 @@ void main() {
           await repositoriorReal.obtenerXml(NickFormado.constructor('benthor'));
       expect(resulatdo.isRight(), true);
     });
+
+    test('Si le paso fokuleh en real es funcional', () async {
+      RepositorioXmlReal repositoriorReal = RepositorioXmlReal();
+      final resulatdo =
+          await repositoriorReal.obtenerXml(NickFormado.constructor('fokuleh'));
+      expect(resulatdo.isRight(), true);
+    });
   });
 }
