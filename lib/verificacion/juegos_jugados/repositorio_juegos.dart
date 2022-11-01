@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_app_1/dominio/coleccion_juegos.dart';
 import 'package:flutter_app_1/dominio/nick_formado.dart';
 import 'package:flutter_app_1/dominio/problemas.dart';
@@ -14,23 +15,25 @@ abstract class RepositorioJuegosJugados {
       NickFormado nick);
 }
 
-// class RepositorioJuegosJugadosReal extends RepositorioJuegosJugados {
-//   RepositorioJuegosJugadosReal(RepositorioXml repositorio) : super(repositorio);
+////////////////////////////////REAL/////////////////////////////////////////////////
+class RepositorioJuegosJugadosReal extends RepositorioJuegosJugados {
+  RepositorioJuegosJugadosReal(RepositorioXml repositorio) : super(repositorio);
 
-//   @override
-//   Future<Either<Problema, Set<JuegoJugado>>> obtenerJuegosJugados(
-//       NickFormado nick) async {
-//     final Either<Problema, List<String>> resultadoXml =
-//         await super.repositorio.obtenerXml(nick);
-//     return resultadoXml.match((l) {
-//       return Left(l);
-//     }, (r) {
-//       final resultado = _obtenerJuegosJugadosDesdeXml(r);
-//       return resultado;
-//     });
-//   }
-// }
+  @override
+  Future<Either<Problema, Set<JuegoJugado>>> obtenerJuegosJugadosPorUsuario(
+      NickFormado nick) async {
+    Either<Problema, List<String>> resultadoXml =
+        await repositorio.obtenerXml(nick);
 
+    return resultadoXml.match((l) {
+      return left(l);
+    }, (r) {
+      return _obtenerJuegosJugadosDesdeXml(r);
+    });
+  }
+}
+
+/////////////////////////////PRUEBAS////////////////////////////////////////////////
 class RepositorioJuegosJugadosPruebas extends RepositorioJuegosJugados {
   RepositorioJuegosJugadosPruebas(RepositorioXml repositorio)
       : super(repositorio);
@@ -49,9 +52,6 @@ class RepositorioJuegosJugadosPruebas extends RepositorioJuegosJugados {
   }
 
   int obtenerTotalPaginas(String nick) {
-    /*
-    final respuesta =  await http.get(
-        Uri.parse('https://boardgamegeek.com/xmlapi2/plays?username=$nick'));*/
     String respuesta = "";
     if (nick == "benthor") {
       respuesta = File('./test/verificacion/juegos_jugados/benthor.xml')
@@ -84,7 +84,6 @@ class RepositorioJuegosJugadosPruebas extends RepositorioJuegosJugados {
             i.toString() +
             ".xml");
       }
-      //direcciones.add("https://boardgamegeek.com/xmlapi2/plays?username=$nombre&pag=$i")
     }
     return direcciones;
   }
@@ -119,10 +118,9 @@ class RepositorioJuegosJugadosPruebas extends RepositorioJuegosJugados {
   }
 }
 
-///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////METODOS/////////////////////////////////////////////
 Either<Problema, Set<JuegoJugado>> _obtenerJuegosJugadosDesdeXml(
     List<String> elXml) {
-  // Set<JuegoJugado> conjuntoSet = {};
   final resultado = elXml.map((e) => _obtenerUnSoloSet(e));
   if (resultado.any((element) => element is Problema)) {
     return Left(VersionIncorrectaXML());
@@ -133,30 +131,27 @@ Either<Problema, Set<JuegoJugado>> _obtenerJuegosJugadosDesdeXml(
 
   // });
 
-  final conjunto =
-      soloSets.fold<Set<JuegoJugado>>({}, (p, a) => a..addAll(p.toList()));
+  final conjunto = soloSets.fold<Set<JuegoJugado>>(
+      {},
+      (Set<JuegoJugado> previo, Set<JuegoJugado> actual) =>
+          actual..addAll(actual));
   return Right(conjunto);
 }
 
-Either<Problema, Set<JuegoJugado>> _obtenerUnSoloSet(String Xml) {
+Either<Problema, Set<JuegoJugado>> _obtenerUnSoloSet(String elXml) {
   try {
     String xmlitemIndex = "item";
     String itemNameAttribute = "name";
     String itemIDAttribute = "objectid";
 
-    Set<JuegoJugado> setResultado = {};
-
-    XmlDocument documento = XmlDocument.parse(Xml);
+    XmlDocument documento = XmlDocument.parse(elXml);
     final losPlay = documento.findAllElements(xmlitemIndex);
     final conjuntoIterable = losPlay.map((e) {
       String nombre = e.getAttribute(itemNameAttribute)!;
       String id = e.getAttribute(itemIDAttribute)!;
       return JuegoJugado.constructor(idPropuesta: id, nombrePropuesta: nombre);
     });
-    final conjunto = Set<JuegoJugado>.from(conjuntoIterable);
-    setResultado.addAll(conjunto);
-
-    return Right(setResultado);
+    return Right(conjuntoIterable.toSet());
   } catch (e) {
     return Left(VersionIncorrectaXML());
   }
