@@ -114,16 +114,29 @@ void main() {
   });
 
   group('Repositorio real con benthor', () {
+    RepositorioXmlReal repositorioXmlReal = RepositorioXmlReal();
+    RepositorioJuegosJugadosReal repositorio =
+        RepositorioJuegosJugadosReal(repositorioXmlReal);
     test('benthor tiene x cantidad de juegos', () async {
-      RepositorioXmlReal repositorioXmlReal = RepositorioXmlReal();
-      RepositorioJuegosJugadosReal repositorio =
-          RepositorioJuegosJugadosReal(repositorioXmlReal);
       final respuesta = await repositorio
           .obtenerJuegosJugadosPorUsuario(NickFormado.constructor('benthor'));
       respuesta.match((l) {
         assert(false);
       }, (r) {
         expect(r.length, equals(429));
+      });
+    });
+
+    test('benthor a jugado Dungeon Lords', () async {
+      final juego = JuegoJugado.constructor(
+          idPropuesta: "13972961", nombrePropuesta: "Dungeon Lords");
+
+      final respuesta = await repositorio
+          .obtenerJuegosJugadosPorUsuario(NickFormado.constructor('benthor'));
+      respuesta.match((l) {
+        assert(false);
+      }, (r) {
+        expect(r.contains(juego), true);
       });
     });
   });
