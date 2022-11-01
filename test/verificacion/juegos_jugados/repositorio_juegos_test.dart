@@ -118,4 +118,46 @@ void main() {
       });
     });
   });
+
+  ////////// FOKULEH REAL//////////////////////////////////////
+  group('Repositorio real con fokuleh', () {
+    RepositorioXmlReal repositorioXmlReal = RepositorioXmlReal();
+    RepositorioJuegosJugadosReal repositorio =
+        RepositorioJuegosJugadosReal(repositorioXmlReal);
+    test('fokuleh tiene x cantidad de juegos', () async {
+      final respuesta = await repositorio
+          .obtenerJuegosJugadosPorUsuario(NickFormado.constructor('fokuleh'));
+      respuesta.match((l) {
+        assert(false);
+      }, (r) {
+        expect(r.length, equals(150));
+      });
+    });
+
+    test('fokuleh a jugado "Hanabi"', () async {
+      final juego = JuegoJugado.constructor(
+          idPropuesta: "98778", nombrePropuesta: "Hanabi");
+
+      final respuesta = await repositorio
+          .obtenerJuegosJugadosPorUsuario(NickFormado.constructor('fokuleh'));
+      respuesta.match((l) {
+        assert(false);
+      }, (r) {
+        expect(r.contains(juego), true);
+      });
+    });
+
+    test('fokuleh no a jugado "Mario Bros"', () async {
+      final juego = JuegoJugado.constructor(
+          idPropuesta: "88950", nombrePropuesta: "Mario Bros");
+
+      final respuesta = await repositorio
+          .obtenerJuegosJugadosPorUsuario(NickFormado.constructor('fokuleh'));
+      respuesta.match((l) {
+        assert(false);
+      }, (r) {
+        expect(r.contains(juego), false);
+      });
+    });
+  });
 }
