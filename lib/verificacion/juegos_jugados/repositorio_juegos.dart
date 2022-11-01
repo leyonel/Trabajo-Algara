@@ -134,7 +134,7 @@ Either<Problema, Set<JuegoJugado>> _obtenerJuegosJugadosDesdeXml(
   final conjunto = soloSets.fold<Set<JuegoJugado>>(
       {},
       (Set<JuegoJugado> previo, Set<JuegoJugado> actual) =>
-          actual..addAll(actual));
+          previo..addAll(actual));
   return Right(conjunto);
 }
 
