@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter_app_1/dominio/coleccion_juegos.dart';
 import 'package:flutter_app_1/dominio/nick_formado.dart';
 import 'package:flutter_app_1/verificacion/juegos_jugados/repositorio_juegos.dart';
@@ -70,34 +72,22 @@ void main() {
       expect(!r.contains(monopoly), true);
     });
   });
-  /*test('Para las funciones de obtener xml', () {
-    RepositorioJuegosJugadosPruebas repositorio =
-        RepositorioJuegosJugadosPruebas();
-    final documento = repositorio.obtenerXMLDeUsuario("benthor");
-    final jugadas =
-        documento.findAllElements("plays").first.findAllElements("play");
-    expect(jugadas, isNotEmpty);
-  });
-  test('Para las funciones de obtener juegos desde xml', () {
-    RepositorioJuegosJugadosPruebas repositorio =
-        RepositorioJuegosJugadosPruebas();
-    final documento = repositorio.obtenerXMLDeUsuario("benthor");
-    final juegos = repositorio.obtenerJuegosDesdeXML(documento);
-    expect(juegos, isNotEmpty);
-  });
-  test('Verificar contenido del set de juegos', () {
-    RepositorioJuegosJugadosPruebas repositorio =
-        RepositorioJuegosJugadosPruebas();
-    final documento = repositorio.obtenerXMLDeUsuario("benthor");
-    final juegos = repositorio.obtenerJuegosDesdeXML(documento);
-    expect(
-        juegos.contains(JuegoJugado.constructor(
-            idPropuesta: "70919", nombrePropuesta: "Takenoko")),
-        true);
-  });*/
+
   test('funcion numero de paginas regresa 4 con fokuleh', () async {
     RepositorioXmlPruebas repositorioPruebas = RepositorioXmlPruebas();
     RepositorioJuegosJugadosPruebas repositorio =
         RepositorioJuegosJugadosPruebas(repositorioPruebas);
+  });
+
+  group('Repositorio real con benthor', () {
+    RepositorioXmlReal repositorioXmlReal = RepositorioXmlReal();
+    RepositorioJuegosJugadosReal repositorio =
+        RepositorioJuegosJugadosReal(repositorioXmlReal);
+
+    test('fokulhe funciona con repositorio real', () async {
+      final respuesta = await repositorio
+          .obtenerJuegosJugadosPorUsuario(NickFormado.constructor('fokuleh'));
+      expect(respuesta.isRight(), true);
+    });
   });
 }

@@ -51,7 +51,7 @@ class RepositorioXmlReal extends RepositorioXml {
       final resultado = await _obtenerXmlOnline(nick.valor);
       final elXml = resultado;
       int cuantasPaginas = _obtenerCuantasPaginasDesdeXmlReal(elXml.toString());
-      print(cuantasPaginas);
+      print('Numero de Paginas: ${cuantasPaginas}');
       List<String> nombrePaginas =
           _obtenerNombresPaginasReal(cuantasPaginas, nick);
       List<String> resultadoFinal = [];
