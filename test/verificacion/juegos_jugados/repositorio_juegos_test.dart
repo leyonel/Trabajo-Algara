@@ -79,7 +79,7 @@ void main() {
         RepositorioJuegosJugadosPruebas(repositorioPruebas);
   });
 
-  group('Repositorio real con benthor', () {
+  group('Repositorio real con fokuleh', () {
     RepositorioXmlReal repositorioXmlReal = RepositorioXmlReal();
     RepositorioJuegosJugadosReal repositorio =
         RepositorioJuegosJugadosReal(repositorioXmlReal);
@@ -88,6 +88,40 @@ void main() {
       final respuesta = await repositorio
           .obtenerJuegosJugadosPorUsuario(NickFormado.constructor('fokuleh'));
       expect(respuesta.isRight(), true);
+    });
+
+    test('fokulhe ha jugado 11 juegos', () async {
+      final respuesta = await repositorio
+          .obtenerJuegosJugadosPorUsuario(NickFormado.constructor('fokuleh'));
+      respuesta.match((l) {
+        expect(true, equals(false));
+      }, (r) {
+        expect(r.length, equals(11));
+        ;
+      });
+    });
+  });
+
+  group('Repositorio real con benthor', () {
+    RepositorioXmlReal repositorioXmlReal = RepositorioXmlReal();
+    RepositorioJuegosJugadosReal repositorio =
+        RepositorioJuegosJugadosReal(repositorioXmlReal);
+
+    test('benthor funciona con repositorio real', () async {
+      final respuesta = await repositorio
+          .obtenerJuegosJugadosPorUsuario(NickFormado.constructor('benthor'));
+      expect(respuesta.isRight(), true);
+    });
+
+    test('benthor ha jugado 24 juegos', () async {
+      final respuesta = await repositorio
+          .obtenerJuegosJugadosPorUsuario(NickFormado.constructor('benthor'));
+      respuesta.match((l) {
+        expect(true, equals(false));
+      }, (r) {
+        expect(r.length, equals(24));
+        ;
+      });
     });
   });
 }
