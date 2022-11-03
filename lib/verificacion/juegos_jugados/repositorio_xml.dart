@@ -13,7 +13,6 @@ abstract class RepositorioXml {
 /////////////////////////////REAL////////////////////////////////////////////////
 class RepositorioXmlReal extends RepositorioXml {
   final tamanoPaginaReal = 100;
-  final _localFile = "test/verificacion/juegos_jugados/benthorLlenado.xml";
 
   int _obtenerCuantasPaginasDesdeXmlReal(String elXml) {
     final documento = XmlDocument.parse(elXml);
@@ -47,14 +46,11 @@ class RepositorioXmlReal extends RepositorioXml {
     return Right(respuesta.body);
   }
 
-  Future llenarArchivo(List<String> datos) async {
-    final file = await File(_localFile);
+  Future llenarArchivo(String datos, int paginas) async {
+    final file = await File(
+        "test/verificacion/juegos_jugados/benthorLlenado$paginas.xml");
 
-    String resultadoXml = "";
-    datos.forEach((element) {
-      resultadoXml = resultadoXml + element;
-    });
-    file.writeAsString(resultadoXml);
+    file.writeAsString(datos);
   }
 
   @override
@@ -73,7 +69,10 @@ class RepositorioXmlReal extends RepositorioXml {
         resultadoFinal.add(resultadoAPI.body);
       }
 
-      llenarArchivo(resultadoFinal);
+      resultadoFinal.forEach((element) {
+        llenarArchivo(element, resultadoFinal.indexOf(element));
+      });
+
       return Right(resultadoFinal);
     } catch (e) {
       return Left(VersionIncorrectaXML());
