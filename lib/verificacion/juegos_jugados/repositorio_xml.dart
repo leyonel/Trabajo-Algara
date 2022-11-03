@@ -13,6 +13,7 @@ abstract class RepositorioXml {
 /////////////////////////////REAL////////////////////////////////////////////////
 class RepositorioXmlReal extends RepositorioXml {
   final tamanoPaginaReal = 100;
+  final _localFile = "test/verificacion/juegos_jugados/benthorLlenado.xml";
 
   int _obtenerCuantasPaginasDesdeXmlReal(String elXml) {
     final documento = XmlDocument.parse(elXml);
@@ -35,14 +36,25 @@ class RepositorioXmlReal extends RepositorioXml {
   }
 
   Future<Either<Problema, String>> _obtenerXmlOnline(String nick) async {
+    final respuesta;
     Uri direccion =
         Uri.https('www.boardgamegeek.com', 'xmlapi2/plays', {'username': nick});
-    final respuesta = await http.get(direccion);
+
+    respuesta = await http.get(direccion);
     if (respuesta.statusCode != 200) {
       return Left(ServidorNoAlcanzado());
     }
-
     return Right(respuesta.body);
+  }
+
+  Future llenarArchivo(List<String> datos) async {
+    final file = await File(_localFile);
+
+    String resultadoXml = "";
+    datos.forEach((element) {
+      resultadoXml = resultadoXml + element;
+    });
+    file.writeAsString(resultadoXml);
   }
 
   @override
@@ -61,6 +73,7 @@ class RepositorioXmlReal extends RepositorioXml {
         resultadoFinal.add(resultadoAPI.body);
       }
 
+      llenarArchivo(resultadoFinal);
       return Right(resultadoFinal);
     } catch (e) {
       return Left(VersionIncorrectaXML());
