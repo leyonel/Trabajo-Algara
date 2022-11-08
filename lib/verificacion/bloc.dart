@@ -1,4 +1,6 @@
+import 'dart:io';
 import 'package:bloc/bloc.dart';
+import 'package:flutter_app_1/dominio/coleccion_juegos.dart';
 import 'package:flutter_app_1/dominio/nick_formado.dart';
 import 'package:flutter_app_1/dominio/problemas.dart';
 import 'package:flutter_app_1/verificacion/data_usuario.dart';
@@ -31,9 +33,9 @@ class SolicitandoNombre extends EstadoVerificacion {}
 class EsperandoConfirmacionNombre extends EstadoVerificacion {}
 
 class MostrandoJuegos extends EstadoVerificacion {
-  final List<String> juegos;
-
-  MostrandoJuegos(this.juegos);
+  final Set<JuegoJugado> juegos;
+  final String nick;
+  MostrandoJuegos(this.juegos, this.nick);
 }
 
 class MostrandoNombre extends EstadoVerificacion {
@@ -84,10 +86,28 @@ class BlocVerificacion extends Bloc<EventoVerificacion, EstadoVerificacion> {
               r.pais, r.estado, event.nombreAProcesar)));
     });
     on<IrAJuegos>((event, emit) {
-      ChecadorDeJugadasDePrueba checador = ChecadorDeJugadasDePrueba();
-      var coleccionUsuario =
-          checador.obtenerJuegos(NickFormado.constructor(event.nombreUsuario));
-      emit(MostrandoJuegos(coleccionUsuario.juegos));
+      String file = "";
+      if (event.nombreUsuario == 'benthor') {
+        try {
+          file =
+              File('./lib/verificacion/juegos_jugados/juegosCadena/benthor.txt')
+                  .readAsStringSync();
+        } catch (e) {
+          file = "Archivo no encontrado";
+        }
+      }
+
+      Set<JuegoJugado> juegosObtenidos = {};
+      for (var juego in file.split('\n')) {
+        if (juego != "") {
+          String id = juego.split('.')[0];
+          String nombre = juego.split('.')[1];
+          juegosObtenidos.add(JuegoJugado.constructor(
+              idPropuesta: id, nombrePropuesta: nombre));
+        }
+      }
+
+      emit(MostrandoJuegos(juegosObtenidos, event.nombreUsuario));
     });
   }
 }
