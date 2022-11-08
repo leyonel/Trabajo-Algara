@@ -60,7 +60,10 @@ class Aplicacion extends StatelessWidget {
               );*/
             }
             if (estado is MostrandoJuegos) {
-              return VistaMostrandoJuegos(juegos: estado.juegos);
+              return VistaMostrandoJuegos(
+                juegos: estado.juegos,
+                nick: estado.nick,
+              );
             }
             return const Center(child: Text('huye'));
           },
