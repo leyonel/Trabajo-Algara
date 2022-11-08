@@ -18,25 +18,85 @@ class VistaMostrandoBusqueda extends StatelessWidget {
         child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+        Column(
           children: [
-            Text(resultadoDeBusqueda),
+            Container(
+              padding: const EdgeInsets.all(8.0),
+              color: Color.fromARGB(255, 37, 34, 34),
+              child: Text(
+                resultadoDeBusqueda,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Color.fromARGB(255, 249, 247, 247),
+                ),
+              ),
+            ),
             const SizedBox(width: 40),
-            TextButton(
-                onPressed: () {
-                  var bloc = context.read<BlocVerificacion>();
-                  bloc.add(IrAJuegos(nombreUsuario));
-                },
-                child: const Text("Ir a Juegos jugados de este usuario"))
+            const SizedBox(height: 30),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(4),
+              child: Stack(
+                children: <Widget>[
+                  Positioned.fill(
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: <Color>[
+                            Color.fromARGB(255, 161, 87, 13),
+                            Color.fromARGB(255, 210, 164, 25),
+                            Color.fromARGB(255, 245, 150, 66),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  TextButton(
+                      style: TextButton.styleFrom(
+                        foregroundColor: Color.fromARGB(255, 0, 0, 0),
+                        padding: const EdgeInsets.all(16.0),
+                        textStyle: const TextStyle(fontSize: 20),
+                      ),
+                      onPressed: () {
+                        var bloc = context.read<BlocVerificacion>();
+                        bloc.add(IrAJuegos(nombreUsuario));
+                      },
+                      child: const Text("Ir a Juegos jugados de este usuario")),
+                ],
+              ),
+            ),
           ],
         ),
-        TextButton(
-            onPressed: () {
-              var bloc = context.read<BlocVerificacion>();
-              bloc.add(Creado());
-            },
-            child: const Text('Volver a solicitar'))
+        ClipRRect(
+          borderRadius: BorderRadius.circular(4),
+          child: Stack(
+            children: <Widget>[
+              Positioned.fill(
+                child: Container(
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: <Color>[
+                        Color.fromARGB(255, 161, 87, 13),
+                        Color.fromARGB(255, 210, 164, 25),
+                        Color.fromARGB(255, 245, 150, 66),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              TextButton(
+                  style: TextButton.styleFrom(
+                    foregroundColor: Color.fromARGB(255, 0, 0, 0),
+                    padding: const EdgeInsets.all(16.0),
+                    textStyle: const TextStyle(fontSize: 20),
+                  ),
+                  onPressed: () {
+                    var bloc = context.read<BlocVerificacion>();
+                    bloc.add(Creado());
+                  },
+                  child: const Text('Volver a solicitar'))
+            ],
+          ),
+        ),
       ],
     ));
   }

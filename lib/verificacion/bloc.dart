@@ -96,6 +96,15 @@ class BlocVerificacion extends Bloc<EventoVerificacion, EstadoVerificacion> {
           file = "Archivo no encontrado";
         }
       }
+      if (event.nombreUsuario == 'fokuleh') {
+        try {
+          file =
+              File('./lib/verificacion/juegos_jugados/juegosCadena/fokuleh.txt')
+                  .readAsStringSync();
+        } catch (e) {
+          file = "Archivo no encontrado";
+        }
+      }
 
       Set<JuegoJugado> juegosObtenidos = {};
       for (var juego in file.split('\n')) {

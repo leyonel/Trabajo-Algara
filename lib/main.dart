@@ -37,7 +37,7 @@ class Aplicacion extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: AppBar(title: const Text('Clase 30/08/22')),
+        appBar: AppBar(title: const Text('Actividad Con XML')),
         body: Builder(
           builder: (context) {
             var estado = context.watch<BlocVerificacion>().state;
@@ -65,7 +65,10 @@ class Aplicacion extends StatelessWidget {
                 nick: estado.nick,
               );
             }
-            return const Center(child: Text('huye'));
+
+            return Center(
+              child: Text("huye"),
+            );
           },
         ),
       ),

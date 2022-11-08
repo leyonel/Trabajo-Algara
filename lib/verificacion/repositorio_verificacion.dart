@@ -82,6 +82,23 @@ class RepositorioPruebasVerificacion extends RepositorioVerificacion {
                           <steamaccount value="" />
                           <traderating value="0" />	
 				                </user>""";
+    const String _fokuleh = """<?xml version="1.0" encoding="utf-8"?>
+                          <user id="1518480" name="fokuleh" termsofuse="https://boardgamegeek.com/xmlapi/termsofuse">
+<firstname value="Juan"/>
+<lastname value="Sanchez"/>
+<avatarlink value="N/A"/>
+<yearregistered value="2017"/>
+<lastlogin value="2022-10-29"/>
+<stateorprovince value="Sinaloa"/>
+<country value="Mexico"/>
+<webaddress value=""/>
+<xboxaccount value=""/>
+<wiiaccount value=""/>
+<psnaccount value=""/>
+<battlenetaccount value=""/>
+<steamaccount value=""/>
+<traderating value="0"/>
+</user>""";
     const String _amlo = """<?xml version="1.0" encoding="utf-8"?>
                       <user id="" name="" termsofuse="https://boardgamegeek.com/xmlapi/termsofuse">
                         <firstname value=""/>
@@ -118,6 +135,10 @@ class RepositorioPruebasVerificacion extends RepositorioVerificacion {
                       </user>""";
     if (nick.valor == 'benthor') {
       final documento = XmlDocument.parse(_benthor);
+      return obenerRegistroUsuarioDesdeXML(documento);
+    }
+    if (nick.valor == 'fokuleh') {
+      final documento = XmlDocument.parse(_fokuleh);
       return obenerRegistroUsuarioDesdeXML(documento);
     }
     if (nick.valor == 'amlo') {
