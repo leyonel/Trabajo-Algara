@@ -36,7 +36,7 @@ class RepositorioImagenesJuegosPruebas extends RepositoriosImagenesJuegos {
           designer = link.getAttribute("value").toString();
         }
       }
-      return id + "." + imagen + "." + designer;
+      return id + "#" + imagen + "#" + designer;
     } catch (e) {
       return "Resultado No encontrado";
     }

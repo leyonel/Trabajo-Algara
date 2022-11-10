@@ -3,6 +3,7 @@ import 'package:flutter_app_1/dominio/coleccion_juegos.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_app_1/verificacion/bloc.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class VistaMostrandoJuegos extends StatelessWidget {
   const VistaMostrandoJuegos(
@@ -25,14 +26,18 @@ class VistaMostrandoJuegos extends StatelessWidget {
               itemCount: contador,
               itemBuilder: (context, index) {
                 var datosJuego = datos.firstWhere((element) {
-                  var id = element.split(".")[0];
+                  var id = element.split("#")[0];
                   return id == listaJuegos[index].id;
                 });
-                var idJuego = datosJuego.split(".")[0];
-                var link = datosJuego.split(".")[1];
-                var disenador = datosJuego.split(".")[2];
+                var idJuego = datosJuego.split("#")[0];
+                var link = datosJuego.split("#")[1];
+                var disenador = datosJuego.split("#")[2];
                 return ListTile(
-                  leading: Text(link),
+                  leading: CachedNetworkImage(
+                    imageUrl: link,
+                    placeholder: (context, url) => CircularProgressIndicator(),
+                    errorWidget: (context, url, error) => Icon(Icons.error),
+                  ),
                   subtitle: Text(idJuego),
                   title: Text(listaJuegos[index].nombre.toString()),
                   trailing: Text(disenador),
