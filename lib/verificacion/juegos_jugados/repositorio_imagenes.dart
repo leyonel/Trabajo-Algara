@@ -1,5 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:html';
 import 'package:http/http.dart' as http;
 import 'package:flutter_app_1/dominio/imagen_formado.dart';
 import 'package:flutter_app_1/dominio/problemas.dart';
@@ -38,7 +36,7 @@ class RepositorioImagenesJuegosPruebas extends RepositoriosImagenesJuegos {
           designer = link.getAttribute("value").toString();
         }
       }
-      return id + "##" + imagen + "##" + designer;
+      return id + "." + imagen + "." + designer;
     } catch (e) {
       return "Resultado No encontrado";
     }

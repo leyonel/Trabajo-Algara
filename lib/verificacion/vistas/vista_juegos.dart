@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app_1/dominio/coleccion_juegos.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_app_1/verificacion/bloc.dart';
+import 'package:fpdart/fpdart.dart';
 
 class VistaMostrandoJuegos extends StatelessWidget {
   const VistaMostrandoJuegos(
-      {Key? key, required this.juegos, required this.nick})
+      {Key? key, required this.juegos, required this.nick, required this.datos})
       : super(key: key);
 
   final Set<JuegoJugado> juegos;
   final String nick;
+  final List<String> datos;
   @override
   Widget build(BuildContext context) {
     int contador = juegos.length;
@@ -22,10 +24,18 @@ class VistaMostrandoJuegos extends StatelessWidget {
             child: ListView.builder(
               itemCount: contador,
               itemBuilder: (context, index) {
+                var datosJuego = datos.firstWhere((element) {
+                  var id = element.split(".")[0];
+                  return id == listaJuegos[index].id;
+                });
+                var idJuego = datosJuego.split(".")[0];
+                var link = datosJuego.split(".")[1];
+                var disenador = datosJuego.split(".")[2];
                 return ListTile(
-                  leading: const Icon(Icons.gamepad_outlined),
-                  subtitle: Text(listaJuegos[index].id.toString()),
+                  leading: Text(link),
+                  subtitle: Text(idJuego),
                   title: Text(listaJuegos[index].nombre.toString()),
+                  trailing: Text(disenador),
                 );
               },
             ),

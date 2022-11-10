@@ -4,6 +4,7 @@ import 'package:flutter_app_1/dominio/coleccion_juegos.dart';
 import 'package:flutter_app_1/dominio/nick_formado.dart';
 import 'package:flutter_app_1/dominio/problemas.dart';
 import 'package:flutter_app_1/verificacion/data_usuario.dart';
+import 'package:flutter_app_1/verificacion/juegos_jugados/repositorio_imagenes.dart';
 import 'package:flutter_app_1/verificacion/repositorio_verificacion.dart';
 
 class EventoVerificacion {}
@@ -35,7 +36,8 @@ class EsperandoConfirmacionNombre extends EstadoVerificacion {}
 class MostrandoJuegos extends EstadoVerificacion {
   final Set<JuegoJugado> juegos;
   final String nick;
-  MostrandoJuegos(this.juegos, this.nick);
+  final List<String> datos;
+  MostrandoJuegos(this.juegos, this.nick, this.datos);
 }
 
 class MostrandoNombre extends EstadoVerificacion {
@@ -85,7 +87,10 @@ class BlocVerificacion extends Bloc<EventoVerificacion, EstadoVerificacion> {
           (r) => emit(MostrandoNombre(r.nombre, r.apellido, r.anioRegistro,
               r.pais, r.estado, event.nombreAProcesar)));
     });
-    on<IrAJuegos>((event, emit) {
+    on<IrAJuegos>((event, emit) async {
+      RepositorioImagenesJuegosPruebas repositorioImagenes =
+          RepositorioImagenesJuegosPruebas();
+
       String file = "";
       if (event.nombreUsuario == 'benthor') {
         try {
@@ -107,16 +112,18 @@ class BlocVerificacion extends Bloc<EventoVerificacion, EstadoVerificacion> {
       }
 
       Set<JuegoJugado> juegosObtenidos = {};
+      List<String> datos = [];
       for (var juego in file.split('\n')) {
         if (juego != "") {
           String id = juego.split('.')[0];
           String nombre = juego.split('.')[1];
           juegosObtenidos.add(JuegoJugado.constructor(
               idPropuesta: id, nombrePropuesta: nombre));
+          datos.add(await repositorioImagenes.obtenerImagenMiniaturaJuego(id));
         }
       }
 
-      emit(MostrandoJuegos(juegosObtenidos, event.nombreUsuario));
+      emit(MostrandoJuegos(juegosObtenidos, event.nombreUsuario, datos));
     });
   }
 }

@@ -63,6 +63,7 @@ class Aplicacion extends StatelessWidget {
               return VistaMostrandoJuegos(
                 juegos: estado.juegos,
                 nick: estado.nick,
+                datos: estado.datos,
               );
             }
 
