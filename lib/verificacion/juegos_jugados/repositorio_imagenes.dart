@@ -27,7 +27,7 @@ class RepositorioImagenesJuegosPruebas extends RepositoriosImagenesJuegos {
           .toString();
 
       final id = documento.findAllElements("item").first.getAttribute("id") ??
-          "No encontrado";
+          "Juego No encontrado";
       final links = documento.findAllElements("link");
 
       var designer = "";
